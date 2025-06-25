@@ -3,7 +3,7 @@ chat_history.db
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.pyc
 # C extensions
 *.so
 
@@ -13,6 +13,7 @@ build/
 develop-eggs/
 dist/
 downloads/
+.venv/
 eggs/
 .eggs/
 lib/
