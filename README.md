@@ -1,6 +1,4 @@
----
 
-```markdown
 # 🦙 Chat App – Streamlit + LLaMA 3
 
 A lightweight, locally-run conversational AI app built using [Streamlit](https://streamlit.io/) and [Meta’s LLaMA 3](https://ai.meta.com/llama/). This project marks my **first practical step into Generative AI** using open-source language models.
