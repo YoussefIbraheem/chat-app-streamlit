@@ -88,12 +88,16 @@ with strmlt.container(key=current_container_key):
             strmlt.chat_message(message.role.value).write(message.body)
 
 if prompt_text := strmlt.chat_input("Type your message here..."):
+    strmlt.chat_message("human").write(prompt_text)
     if conversation == None:
         new_conv_title = summerize_chat_content(prompt_text)
         conversation = create_conversation(session, new_conv_title.content)
+        
+        strmlt.session_state.active_conv_id = conversation.id
         strmlt.session_state.require_reset = True
+        
+    
     create_message(session, prompt_text, conversation.id, RoleEnum("human"))
-    strmlt.chat_message("human").write(prompt_text)
     response_placeholder = strmlt.chat_message("ai").empty()
     full_response = ""
     with strmlt.spinner("Thinking..."):
