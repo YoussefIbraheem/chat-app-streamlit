@@ -92,11 +92,6 @@ if previous_conv_id != strmlt.session_state.active_conv_id:
         elif msg.role.value == RoleEnum.AI.value:
             msgs.add_ai_message(msg.body)    
 
-
-
-
-chain_w_history = get_chain_w_history(msgs)
-
 conversation = None
 messages = None
 
@@ -113,6 +108,9 @@ if prompt_text := strmlt.chat_input("Type your message here..."):
     strmlt.chat_message("human").write(prompt_text)
     if conversation == None:
         new_conv_title = summerize_chat_content(prompt_text)
+        if new_conv_title is None:
+            strmlt.error("Error generating conversation title. Please try again.")
+            strmlt.stop()
         conversation = create_conversation(session, new_conv_title.content)
         
         strmlt.session_state.active_conv_id = conversation.id
@@ -123,6 +121,12 @@ if prompt_text := strmlt.chat_input("Type your message here..."):
     response_placeholder = strmlt.chat_message("ai").empty()
     full_response = ""
     with strmlt.spinner("Thinking..."):
+        chain_w_history = get_chain_w_history(msgs)
+        
+        if chain_w_history is None:
+            strmlt.error("Error creating chain with message history. Please check your setup.")
+            strmlt.stop()
+            
         for chunk in chain_w_history.stream(
             {"input": prompt_text}, config={"configurable": {"session_id": f"conv-{conversation.id}"}}
         ):

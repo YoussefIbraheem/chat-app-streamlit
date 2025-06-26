@@ -20,9 +20,19 @@ summerize_chain = summerize_prompt | llm
 
 
 def get_chain_w_history(messages):
-    return RunnableWithMessageHistory(
+    try:
+            return RunnableWithMessageHistory(
         chain, lambda session_id: messages, history_messages_key="history"
     )
+    except Exception as e:
+        print(f"Error creating chain with history: {e}")
+        return None
+
+
 
 def summerize_chat_content(context):
-    return summerize_chain.invoke({"context":context})
+    try:
+        return summerize_chain.invoke({"context":context})
+    except Exception as e:
+        print(f"Error summarizing chat content: {e}")
+        return None
